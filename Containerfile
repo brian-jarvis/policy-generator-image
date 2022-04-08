@@ -1,4 +1,4 @@
-FROM registry.access.redhat.com/ubi8/ubi-minimal:8.5
+FROM registry.access.redhat.com/ubi8/ubi-minimal:8.5 as builder
 
 WORKDIR /root
 ## install kustomize
@@ -9,8 +9,7 @@ RUN ln -s ${HOME}/kustomize \
   /usr/local/bin/
 
 ## install the policy generator
-RUN mkdir -p ${HOME}/.config/kustomize/plugin/policy.open-cluster-management.io/v1/policygenerator && \
-  mkdir -p ${HOME}/kustomize-plugins/policygenerator
+RUN mkdir -p ${HOME}/kustomize-plugins/policygenerator
 
 RUN curl -s https://api.github.com/repos/stolostron/policy-generator-plugin/releases/latest \
   | grep "browser_download_url.*linux-amd64-PolicyGenerator" \
@@ -18,5 +17,13 @@ RUN curl -s https://api.github.com/repos/stolostron/policy-generator-plugin/rele
   | tr -d \" \
   | xargs curl --output ${HOME}/kustomize-plugins/policygenerator/linux-amd64-PolicyGenerator 
 
-RUN ln -s ${HOME}/kustomize-plugins/policygenerator/linux-amd64-PolicyGenerator \
-  ${HOME}/.config/kustomize/plugin/policy.open-cluster-management.io/v1/policygenerator/
+RUN ls -l ${HOME}/kustomize-plugins/policygenerator/
+
+
+FROM registry.access.redhat.com/ubi8/ubi-micro:8.5
+WORKDIR /root
+
+RUN mkdir -p /root/.config/kustomize/plugin/policy.open-cluster-management.io/v1/policygenerator
+
+COPY --from=builder /root/kustomize-plugins/policygenerator/linux-amd64-PolicyGenerator /root/.config/kustomize/plugin/policy.open-cluster-management.io/v1/policygenerator/
+COPY --from=builder /root/kustomize /usr/local/bin/
