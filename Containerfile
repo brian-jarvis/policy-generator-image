@@ -15,7 +15,7 @@ RUN curl -s https://api.github.com/repos/stolostron/policy-generator-plugin/rele
   | grep "browser_download_url.*linux-amd64-PolicyGenerator" \
   | cut -d : -f 2,3 \
   | tr -d \" \
-  | xargs curl --output ${HOME}/kustomize-plugins/policygenerator/linux-amd64-PolicyGenerator 
+  | xargs curl -L --output ./linux-amd64-PolicyGenerator 
 
 RUN ls -l ${HOME}/kustomize-plugins/policygenerator/
 
@@ -27,3 +27,4 @@ RUN mkdir -p /root/.config/kustomize/plugin/policy.open-cluster-management.io/v1
 
 COPY --from=builder /root/kustomize-plugins/policygenerator/linux-amd64-PolicyGenerator /root/.config/kustomize/plugin/policy.open-cluster-management.io/v1/policygenerator/
 COPY --from=builder /root/kustomize /usr/local/bin/
+RUN chmod +x /root/.config/kustomize/plugin/policy.open-cluster-management.io/v1/policygenerator/linux-amd64-PolicyGenerator
