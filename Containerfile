@@ -15,10 +15,10 @@ RUN curl -s https://api.github.com/repos/stolostron/policy-generator-plugin/rele
   | grep "browser_download_url.*linux-amd64-PolicyGenerator" \
   | cut -d : -f 2,3 \
   | tr -d \" \
-  | xargs curl -L --output ./linux-amd64-PolicyGenerator 
+  | xargs curl -L --output ${HOME}/kustomize-plugins/policygenerator/linux-amd64-PolicyGenerator 
 
 RUN ls -l ${HOME}/kustomize-plugins/policygenerator/
-RUN chmod +x ${HOME}/kustomize-plugins/policygenerator//linux-amd64-PolicyGenerator
+RUN chmod +x ${HOME}/kustomize-plugins/policygenerator/linux-amd64-PolicyGenerator
 
 FROM registry.access.redhat.com/ubi8/ubi-micro:8.5
 WORKDIR /root
