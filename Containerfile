@@ -1,4 +1,4 @@
-FROM registry.redhat.io/rhel8/go-toolset:1.17 as gobuilder
+FROM quay.io/bjarvis/policy-generator:gotools-1.17 as gobuilder
 
 USER root
 WORKDIR /work-bin
