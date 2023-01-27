@@ -30,7 +30,7 @@ RUN cd policy-generator-plugin && make build-release
 # RUN ls -l ${HOME}/kustomize-plugins/policygenerator/
 # RUN chmod +x ${HOME}/kustomize-plugins/policygenerator/linux-amd64-PolicyGenerator
 
-FROM registry.access.redhat.com/ubi8/ubi-micro:8.5
+FROM registry.redhat.com/ubi8/ubi-micro:8.5
 WORKDIR /root
 
 RUN mkdir -p /root/.config/kustomize/plugin/policy.open-cluster-management.io/v1/policygenerator
